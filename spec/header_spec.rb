@@ -34,15 +34,15 @@ describe Header do
   end
 
   it "should read the maximum index fraction" do
-    @header.maximum_index_fraction_to_embed.should == 64
+    @header.maximum_index_fraction.should == 64
   end
 
   it "should read the minimum index fraction" do
-    @header.minimum_index_fraction_to_embed.should == 32
+    @header.minimum_index_fraction.should == 32
   end
 
   it "should read the minimum table fraction" do
-    @header.minimum_table_fraction_to_embed.should == 32
+    @header.minimum_table_fraction.should == 32
   end
 
   it "should read the file change counter" do
