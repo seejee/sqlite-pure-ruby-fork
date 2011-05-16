@@ -4,7 +4,7 @@ require "pure-sqlite/version"
 
 Gem::Specification.new do |s|
   s.name        = "pure-sqlite"
-  s.version     = Pure::Sqlite::VERSION
+  s.version     = PureSqlite::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Chris Geihsler"]
   s.email       = ["chris@geihsler.net"]
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{A gem that reads SQLite database files written entirely in ruby.}
   s.description = %q{}
 
-  s.rubyforge_project = "pure-sqlite"
+  #s.rubyforge_project = "pure-sqlite"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

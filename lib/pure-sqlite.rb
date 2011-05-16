@@ -1,5 +1,4 @@
-module Pure
-  module Sqlite
-    # Your code goes here...
-  end
+require_relative "pure-sqlite/header"
+
+module PureSqlite
 end
