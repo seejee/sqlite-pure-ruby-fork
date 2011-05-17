@@ -21,7 +21,7 @@ module PureSQLite
       text_encoding:             { length:  4, pattern: 'N'   },
       user_cookie:               { length:  4, pattern: 'N'   },
       incremental_vacuum_mode:   { length:  4, pattern: 'N'   },
-      unused:                    { length: 24, pattern: 'N16' },
+      unused:                    { length: 24, pattern: 'N6'  },
       version_valid_for:         { length:  4, pattern: 'N'   },
       sqlite_version_number:     { length:  4, pattern: 'N'   },
     }
