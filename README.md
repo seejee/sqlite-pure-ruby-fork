@@ -1,1 +1,1 @@
-## pure-sqlite: A SQLite implementation in 100% ruby. 
+pure-sqlite: A SQLite implementation in 100% ruby. 
