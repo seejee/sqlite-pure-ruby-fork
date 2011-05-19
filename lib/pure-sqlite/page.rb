@@ -11,16 +11,17 @@ module PureSQLite
 
     STRUCTURE.keys.each do |field|
       define_method(field) do
-        @page[field]
+        @page_header[field]
       end
     end
 
-    attr_reader :number
+    attr_reader :number, :cells
 
     def initialize(header, number, stream)
-      @header = header
-      @number = number
-      @page   = read_page(stream)
+      @header       = header
+      @number       = number
+      @page_header  = read_page_header(stream)
+      @cells        = read_cells(stream)
     end
 
     def header_length
@@ -38,15 +39,35 @@ module PureSQLite
 
     private
 
-    def read_page(stream)
+    def read_page_header(stream)
       move_to_page_start(stream)
       STRUCTURE.parse(stream)
     end
 
     def move_to_page_start(stream)
-      seek = @header.page_size * (number - 1)
+      seek = page_offset
       seek += 100 if @number == 1
       stream.seek(seek, IO::SEEK_SET)
+    end
+
+    def page_offset
+      @header.page_size * (number - 1)
+    end
+
+    def read_cells(stream)
+      cells = []
+      next_cell_start = page_offset + content_start
+
+      (1..num_cells).each do
+        stream.seek(next_cell_start, IO::SEEK_SET)
+
+        cell = TableCell.new(stream)
+        cells << cell
+
+        next_cell_start += cell.total_size
+      end
+
+      cells
     end
 
 

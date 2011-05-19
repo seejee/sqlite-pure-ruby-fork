@@ -37,6 +37,34 @@ describe Page do
 
   end
 
+  context "when reading the first cell" do
+
+    before(:all) do
+      open_test_db do |io|
+        @header = Header.new(io)
+        @page = Page.new(@header, 1, io)
+      end
+    end
+
+    it "should populate cells" do
+      @page.cells.length.should == @page.num_cells
+    end
+
+    it "should read the first cells record size" do
+      @page.cells[0].record_size.should == 89
+    end
+
+    it "should read the first cells key value" do
+      @page.cells[0].key_value.should == 2
+    end
+
+    it "should have a data record at position x" do
+      @page.cells[0].data_record_position.should == 1875
+    end
+
+  end
+
+
   context "when reading the second page" do
 
     before(:all) do
