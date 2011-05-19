@@ -22,29 +22,29 @@ module PureSQLite
         byte = stream.readbyte()
         counter += 1
 
-        if(byte & IS_LAST_BYTE_MASK == 0)
-          is_last = true
-          shift   = 7
-        elsif(counter == 9)
-          is_last = true
-          shift   = 8
-        else
-          is_last = false
-          shift   = 7
-          byte    &= LAST_SEVEN_BITS_MASK
+        #hit the 9th byte before finding terminating byte, must be neg
+        if(counter == 9)
+          value = value << 8
+          value += byte
+          break;
         end
 
-        value    = value << shift unless counter == 1
-        value   += byte
-
-        if(is_last)
+        #found the terminating byte
+        if(byte & IS_LAST_BYTE_MASK == 0)
+          value = value << 7
+          value += byte
           break
         end
+
+        #handle a non terminating byte
+        value = value << 7
+        value += byte & LAST_SEVEN_BITS_MASK
+
       end
 
       {
         length: counter,
-        value: value
+        value: [value].pack('q').unpack('q').first
       }
     end
 

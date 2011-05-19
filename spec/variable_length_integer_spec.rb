@@ -45,12 +45,23 @@ describe VariableLengthInteger do
     end
 
     it "should have a value of -1" do
-    #  0xFFFFFFFFFFFFFFFF.should == -1
-
-      puts "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF".unpack('q')
-
-
       @variable.value.should == -1
+    end
+
+  end
+
+  context "reading a -78506" do
+
+    before(:all) do
+      setup("\xFF\xFF\xFF\xFF\xFF\xFF\xFD\xCD\x56")
+    end
+
+    it "should have a length of 9" do
+      @variable.length.should == 9
+    end
+
+    it "should have a value of -78506" do
+      @variable.value.should == -78506
     end
 
   end
