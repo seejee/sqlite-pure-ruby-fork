@@ -58,10 +58,6 @@ describe Page do
       @page.cells[0].key_value.should == 2
     end
 
-    it "should have a data record at position x" do
-      @page.cells[0].data_record_position.should == 1875
-    end
-
   end
 
 

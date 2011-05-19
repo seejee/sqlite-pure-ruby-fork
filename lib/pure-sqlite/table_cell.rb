@@ -6,7 +6,6 @@ module PureSQLite
     def initialize(stream)
       @record_size = VariableLengthInteger.new(stream)
       @key_value = VariableLengthInteger.new(stream)
-      @data_record_position = stream.pos
       @database_record = DatabaseRecord.new(record_size, stream)
     end
 

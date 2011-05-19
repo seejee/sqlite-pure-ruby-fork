@@ -31,21 +31,18 @@ describe DatabaseRecord do
       get_data(1)[:type].should == :text
       get_data(1)[:length].should == 9
       get_data(1)[:value].should == 'table_two'
-
     end
 
     it "should have read the third entry" do
       get_data(2)[:type].should == :text
       get_data(2)[:length].should == 9
       get_data(2)[:value].should == 'table_two'
-
     end
 
     it "should have read the fourth entry" do
       get_data(3)[:type].should == :int
       get_data(3)[:length].should == 1
       get_data(3)[:value].should == "\x03"
-
     end
 
     it "should have read the fifth entry" do

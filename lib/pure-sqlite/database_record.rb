@@ -26,12 +26,11 @@ module PureSQLite
 
     def populate_values(stream, data)
       data.each do |hash|
-        hash[:value] = get_value(stream, hash)
+        hash[:value] = get_value(stream, hash[:length])
       end
     end
 
-    def get_value(stream, hash)
-      length = hash[:length]
+    def get_value(stream, length)
       bytes = stream.read(length)
       bytes.unpack("A#{length}").first
     end
@@ -49,7 +48,7 @@ module PureSQLite
         bytes_remaining -= type_header.length
       end
 
-      types;
+      types
     end
 
     def get_data_type_entry(type_value)
