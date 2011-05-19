@@ -37,6 +37,10 @@ module PureSQLite
       end
     end
 
+    def each_record
+      cells.each {|c| yield c.database_record }
+    end
+
     private
 
     def read_page_header(stream)

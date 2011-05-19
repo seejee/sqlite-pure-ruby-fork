@@ -8,9 +8,12 @@ end
 
 module PureSQLite
 
+  def test_db_filename
+    File.dirname(__FILE__) + "/resources/test.db"
+  end
+
   def open_test_db
-    test_db_path = File.dirname(__FILE__) + "/resources/test.db"
-    stream = File.open(test_db_path)
+    stream = File.open(test_db_filename)
     yield stream
     stream.close
   end
