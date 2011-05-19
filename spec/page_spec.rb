@@ -66,7 +66,7 @@ describe Page do
     before(:all) do
       open_test_db do |io|
         @header = Header.new(io)
-        @page = Page.new(@header, 2, io)
+        @page   = Page.new(@header, 2, io)
       end
     end
 

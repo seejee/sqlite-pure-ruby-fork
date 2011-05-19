@@ -1,17 +1,21 @@
 module PureSQLite
   class VariableLengthInteger
 
-    attr_reader :length, :value
-
     def initialize(stream)
-      result  = parse(stream)
-      @length = result[:length]
-      @value  = result[:value]
+      @result = parse(stream)
+    end
+
+    def length
+      @result[:length]
+    end
+
+    def value
+      @result[:value]
     end
 
     private
 
-    IS_LAST_BYTE_MASK = 0b10000000
+    IS_LAST_BYTE_MASK    = 0b10000000
     LAST_SEVEN_BITS_MASK = 0b01111111
 
     def parse(stream)

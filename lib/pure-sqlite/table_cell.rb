@@ -4,9 +4,9 @@ module PureSQLite
     attr_reader :data_record_position, :database_record
 
     def initialize(stream)
-      @record_size = VariableLengthInteger.new(stream)
-      @key_value = VariableLengthInteger.new(stream)
-      @database_record = DatabaseRecord.new(record_size, stream)
+      @record_size     = VariableLengthInteger.new(stream)
+      @key_value       = VariableLengthInteger.new(stream)
+      @database_record = DatabaseRecord.new(stream)
     end
 
     def total_size

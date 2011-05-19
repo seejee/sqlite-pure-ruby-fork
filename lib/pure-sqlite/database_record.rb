@@ -3,9 +3,9 @@ module PureSQLite
 
     attr_reader :data
 
-    def initialize(record_size, stream)
+    def initialize(stream)
       @header_index  = VariableLengthInteger.new(stream)
-      @data           = get_data(stream)
+      @data          = get_data(stream)
     end
 
     def header_index_length

@@ -2,11 +2,11 @@ module PureSQLite
   class Page
 
     STRUCTURE = BinaryStructure.new(
-        page_flag:              { length: 1, pattern: 'C' },
-        first_available:        { length: 2, pattern: 'n' },
-        num_cells:              { length: 2, pattern: 'n' },
-        content_start:          { length: 2, pattern: 'n' },
-        fragmented_free_bytes:  { length: 1, pattern: 'C' }
+      page_flag:              { length: 1, pattern: 'C' },
+      first_available:        { length: 2, pattern: 'n' },
+      num_cells:              { length: 2, pattern: 'n' },
+      content_start:          { length: 2, pattern: 'n' },
+      fragmented_free_bytes:  { length: 1, pattern: 'C' }
     )
 
     STRUCTURE.keys.each do |field|
