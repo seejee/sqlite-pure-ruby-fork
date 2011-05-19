@@ -7,7 +7,7 @@ describe Page do
     before(:all) do
       open_test_db do |io|
         @header = Header.new(io)
-        @page = Page.new(@header, 1, io)
+        @page   = Page.new(@header, 1, io)
       end
     end
 
@@ -51,11 +51,11 @@ describe Page do
     end
 
     it "should read the first cells record size" do
-      @page.cells[0].record_size.should == 89
+      @page.cells[0].record_size.should == 82
     end
 
     it "should read the first cells key value" do
-      @page.cells[0].key_value.should == 2
+      @page.cells[0].key_value.should == 1
     end
 
   end

@@ -44,12 +44,14 @@ module PureSQLite
 
       end
 
-      adjusted_for_twos_complement = [value].pack('q').unpack('q').first
-
       {
         length: counter,
-        value: adjusted_for_twos_complement
+        value: twos_complement(value)
       }
+    end
+
+    def twos_complement(value)
+      [value].pack('q').unpack('q').first
     end
 
   end

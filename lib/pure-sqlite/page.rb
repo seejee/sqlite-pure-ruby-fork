@@ -67,7 +67,7 @@ module PureSQLite
         next_cell_start += cell.total_size
       end
 
-      cells
+      cells.sort! {|a,b| a.key_value <=> b.key_value }
     end
 
 

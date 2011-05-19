@@ -13,8 +13,8 @@ describe DatabaseRecord do
       end
     end
 
-    it "should have a header of 7 bytes" do
-      @database_record.total_header_bytes.should == 7
+    it "should have a header of 6 bytes" do
+      @database_record.total_header_bytes.should == 6
     end
 
     it "should have a 5 data elements" do
@@ -30,25 +30,25 @@ describe DatabaseRecord do
     it "should read the second entry" do
       get_data(1)[:type].should == :text
       get_data(1)[:length].should == 9
-      get_data(1)[:value].should == 'table_two'
+      get_data(1)[:value].should == 'table_one'
     end
 
     it "should have read the third entry" do
       get_data(2)[:type].should == :text
       get_data(2)[:length].should == 9
-      get_data(2)[:value].should == 'table_two'
+      get_data(2)[:value].should == 'table_one'
     end
 
     it "should have read the fourth entry" do
       get_data(3)[:type].should == :int
       get_data(3)[:length].should == 1
-      get_data(3)[:value].should == "\x03"
+      get_data(3)[:value].should == "\x02"
     end
 
     it "should have read the fifth entry" do
       get_data(4)[:type].should == :text
-      get_data(4)[:length].should == 58
-      get_data(4)[:value].should == "CREATE TABLE table_two(id int, another_column varchar(50))"
+      get_data(4)[:length].should == 52
+      get_data(4)[:value].should == "CREATE TABLE table_one(id int, a_column varchar(20))"
     end
 
     def get_data(index)
