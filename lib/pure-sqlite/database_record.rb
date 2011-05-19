@@ -1,16 +1,55 @@
 module PureSQLite
   class DatabaseRecord
 
-    attr_reader :data_types
+    attr_reader :data
 
     def initialize(record_size, stream)
-      @record_length = VariableLengthInteger.new(stream)
+      @header_index  = VariableLengthInteger.new(stream)
+      @data           = get_data(stream)
+    end
 
-      @data_types = []
-      (1..entries).each do
-        type_value = VariableLengthInteger.new(stream).value
-        @data_types << get_data_type_entry(type_value)
+    def header_index_length
+      @header_index.length
+    end
+
+    def total_header_bytes
+      @header_index.value
+    end
+
+    private
+
+    def get_data(stream)
+      data = get_data_types(stream)
+      populate_values(stream, data)
+      data
+    end
+
+    def populate_values(stream, data)
+      data.each do |hash|
+        hash[:value] = get_value(stream, hash)
       end
+    end
+
+    def get_value(stream, hash)
+      length = hash[:length]
+      bytes = stream.read(length)
+      bytes.unpack("A#{length}").first
+    end
+
+    def get_data_types(stream)
+      types = []
+      bytes_remaining = total_header_bytes - header_index_length
+
+      until(bytes_remaining == 0)
+        type_header = VariableLengthInteger.new(stream)
+        type_value = type_header.value
+
+        types << get_data_type_entry(type_value)
+
+        bytes_remaining -= type_header.length
+      end
+
+      types;
     end
 
     def get_data_type_entry(type_value)
@@ -25,17 +64,16 @@ module PureSQLite
         when 7 then {type: :float , length: 8}
         when 8 then {type: :int   , length: 0}
         when 9 then {type: :int   , length: 0}
-        else
-          if(type_value.odd? && type_value > 12)
-            {type: :string  , length: (type_value - 13) / 2}
-          else
-            {type: :blob    , length: (type_value - 12) / 2}
-          end
+        else get_complex_data_type(type_value)
       end
     end
 
-    def entries
-      @record_length.value
+    def get_complex_data_type(type_value)
+      if(type_value.odd? && type_value > 12)
+        {type: :text, length: (type_value - 13) / 2}
+      else
+        {type: :blob, length: (type_value - 12) / 2}
+      end
     end
 
   end
