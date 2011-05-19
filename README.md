@@ -4,13 +4,13 @@ At the moment, this library only reads the 100 byte header and the schema
 page so that a list of tables contained by the database can be retrieved.
 
 To get the list of tables:
-
+  
   require 'PureSQLite'
   
   PureSQLite::Database.open(filename) do |db|
     db.tables
   end
-
+  
 For information about the file format itself, please see the following link:
 
 http://www.sqlite.org/fileformat.html
