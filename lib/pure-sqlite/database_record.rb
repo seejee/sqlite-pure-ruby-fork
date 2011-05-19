@@ -37,15 +37,15 @@ module PureSQLite
     def get_entries(stream)
       bytes_remaining = total_header_bytes - header_index_length
 
-      types = []
+      entries = []
 
       until(bytes_remaining == 0)
         entry = DatabaseRecordEntry.new(stream)
-        types << entry
+        entries << entry
         bytes_remaining -= entry.header_length
       end
 
-      types
+      entries
     end
   end
 end
