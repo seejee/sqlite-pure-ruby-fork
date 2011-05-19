@@ -1,7 +1,7 @@
 pure-sqlite: A SQLite implementation in 100% ruby.
 
 At the moment, this library only reads the 100 byte header and the schema
-page so that a list of tables contained by the database can be retrieved.
+page so that a list of tables can be retrieved.
 
 To get the list of tables:
   
