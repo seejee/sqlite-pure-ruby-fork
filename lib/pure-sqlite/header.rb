@@ -1,7 +1,7 @@
 module PureSQLite
   class Header
 
-    STRUCTURE = {
+    STRUCTURE = BinaryStructure.new(
       well_known_string:         { length: 16, pattern: 'Z16' },
       page_size:                 { length:  2, pattern: 'n'   },
       write_version:             { length:  1, pattern: 'C'   },
@@ -23,8 +23,8 @@ module PureSQLite
       incremental_vacuum_mode:   { length:  4, pattern: 'N'   },
       unused:                    { length: 24, pattern: 'N6'  },
       version_valid_for:         { length:  4, pattern: 'N'   },
-      sqlite_version_number:     { length:  4, pattern: 'N'   },
-    }
+      sqlite_version_number:     { length:  4, pattern: 'N'   }
+    )
 
     STRUCTURE.keys.each do |field|
       define_method(field) do
@@ -33,24 +33,11 @@ module PureSQLite
     end
 
     def initialize(stream)
-      @header = parse_header(stream)
+      @header = STRUCTURE.parse(stream)
     end
 
     def length
-      STRUCTURE.values.inject(0) { |sum, opts| sum += opts[:length]}
-    end
-
-    private
-
-    def parse_header(stream)
-      hash = {}
-
-      STRUCTURE.each do |field, opts|
-        field_bytes = stream.read(opts[:length])
-        hash[field] = field_bytes.unpack(opts[:pattern]).first
-      end
-
-      hash
+      STRUCTURE.length
     end
 
   end

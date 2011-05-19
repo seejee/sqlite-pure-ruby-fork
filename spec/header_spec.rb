@@ -3,10 +3,9 @@ require "spec_helper"
 describe Header do
 
   before(:all) do
-    test_db_path = File.dirname(__FILE__) + "/resources/test.db"
-    stream = File.open(test_db_path)
-    @header = Header.new(stream)
-    stream.close
+    open_test_db do |io|
+      @header = Header.new(io)
+    end
   end
 
   it "should consist of 100 bytes" do
