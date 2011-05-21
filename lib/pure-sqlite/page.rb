@@ -9,6 +9,13 @@ module PureSQLite
       fragmented_free_bytes:  { length: 1, pattern: 'C' }
     )
 
+    PAGE_FLAGS = {
+      0x2 => :index_internal_node,
+      0xA => :index_leaf_node,
+      0x5 => :table_internal_node,
+      0xD => :table_leaf_node,
+    }
+
     STRUCTURE.keys.each do |field|
       define_method(field) do
         @page_header[field]
@@ -37,13 +44,6 @@ module PureSQLite
     end
 
     private
-
-    PAGE_FLAGS = {
-        0x2 => :index_internal_node,
-        0xA => :index_leaf_node,
-        0x5 => :table_internal_node,
-        0xD => :table_leaf_node,
-    }
 
     def read_page_header(stream)
       move_to_page_start(stream)

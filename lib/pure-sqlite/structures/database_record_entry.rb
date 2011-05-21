@@ -3,6 +3,19 @@ module PureSQLite
 
     class DatabaseRecordEntry
 
+      SIMPLE_TYPES = {
+        0 => {type: :null  , length: 0},
+        1 => {type: :int   , length: 1},
+        2 => {type: :int   , length: 2},
+        3 => {type: :int   , length: 3},
+        4 => {type: :int   , length: 4},
+        5 => {type: :int   , length: 6},
+        6 => {type: :int   , length: 8},
+        7 => {type: :float , length: 8},
+        8 => {type: :int   , length: 0},
+        9 => {type: :int   , length: 0},
+      }
+
       def initialize(stream)
         @header = VariableLengthInteger.new(stream)
         @data   = get_data_type_entry(@header.value)
@@ -29,19 +42,6 @@ module PureSQLite
       end
 
       private
-
-      SIMPLE_TYPES = {
-          0 => {type: :null  , length: 0},
-          1 => {type: :int   , length: 1},
-          2 => {type: :int   , length: 2},
-          3 => {type: :int   , length: 3},
-          4 => {type: :int   , length: 4},
-          5 => {type: :int   , length: 6},
-          6 => {type: :int   , length: 8},
-          7 => {type: :float , length: 8},
-          8 => {type: :int   , length: 0},
-          9 => {type: :int   , length: 0},
-      }
 
       def get_data_type_entry(type_value)
         SIMPLE_TYPES[type_value] || get_complex_data_type(type_value)
