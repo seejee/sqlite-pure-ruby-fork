@@ -14,7 +14,7 @@ module PureSQLite
     end
 
     def length
-      @hash.values.inject(0) { |sum, opts| sum += opts[:length]}
+      @hash.values.inject(0) { |sum, opts| sum + opts[:length]}
     end
 
     def parse(stream)
