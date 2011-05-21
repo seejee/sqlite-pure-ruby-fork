@@ -15,8 +15,11 @@ module PureSQLite
 
     private
 
-    IS_LAST_BYTE_MASK    = 0b10000000
-    LAST_SEVEN_BITS_MASK = 0b01111111
+    IS_FIRST_BYTE_ZERO_MASK = 0b10000000
+    LAST_SEVEN_BITS_MASK    = 0b01111111
+
+    SIGNED_64_BIT_MAX   = 2**63
+    UNSIGNED_64_BIT_MAX = 2**64
 
     def parse(stream)
       counter = 0
@@ -27,7 +30,7 @@ module PureSQLite
         counter += 1
 
         is_ninth_byte = (counter == 9)
-        byte_starts_with_zero = (byte & IS_LAST_BYTE_MASK == 0)
+        byte_starts_with_zero = (byte & IS_FIRST_BYTE_ZERO_MASK == 0)
 
         usable_size = is_ninth_byte ? 8 : 7
 
@@ -51,7 +54,11 @@ module PureSQLite
     end
 
     def twos_complement(value)
-      [value].pack('q').unpack('q').first
+      if value > SIGNED_64_BIT_MAX
+        value - UNSIGNED_64_BIT_MAX
+      else
+        value
+      end
     end
 
   end

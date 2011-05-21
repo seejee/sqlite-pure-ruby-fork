@@ -1,7 +1,7 @@
 module PureSQLite
   class TableCell
 
-    attr_reader :data_record_position, :database_record
+    attr_reader :database_record
 
     def initialize(stream)
       @record_size     = VariableLengthInteger.new(stream)
