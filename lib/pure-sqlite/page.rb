@@ -1,7 +1,7 @@
 module PureSQLite
   class Page
 
-    STRUCTURE = BinaryStructure.new(
+    STRUCTURE = Structures::BinaryStructure.new(
       page_flag:              { length: 1, pattern: 'C' },
       first_available:        { length: 2, pattern: 'n' },
       num_cells:              { length: 2, pattern: 'n' },
@@ -65,7 +65,7 @@ module PureSQLite
       (1..num_cells).each do
         stream.seek(next_cell_start, IO::SEEK_SET)
 
-        cell = TableCell.new(stream)
+        cell = Structures::TableCell.new(stream)
         cells << cell
 
         next_cell_start += cell.total_size

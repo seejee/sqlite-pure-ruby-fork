@@ -1,6 +1,6 @@
 require "rspec"
 
-describe VariableLengthInteger do
+describe Structures::VariableLengthInteger do
 
   context "reading a single byte value" do
 
@@ -68,7 +68,7 @@ describe VariableLengthInteger do
 
   def setup(bytes)
     StringIO.open(bytes) do |io|
-      @variable = VariableLengthInteger.new(io)
+      @variable = Structures::VariableLengthInteger.new(io)
     end
   end
 

@@ -1,7 +1,7 @@
 module PureSQLite
   class Header
 
-    STRUCTURE = BinaryStructure.new(
+    STRUCTURE = Structures::BinaryStructure.new(
       well_known_string:         { length: 16, pattern: 'Z16' },
       page_size:                 { length:  2, pattern: 'n'   },
       write_version:             { length:  1, pattern: 'C'   },

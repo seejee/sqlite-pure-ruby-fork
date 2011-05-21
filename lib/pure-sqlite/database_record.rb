@@ -4,7 +4,7 @@ module PureSQLite
     attr_reader :entries
 
     def initialize(stream)
-      @header_index  = VariableLengthInteger.new(stream)
+      @header_index  = Structures::VariableLengthInteger.new(stream)
       @entries       = read_entries(stream)
     end
 
@@ -40,7 +40,7 @@ module PureSQLite
       entries = []
 
       until(bytes_remaining == 0)
-        entry = DatabaseRecordEntry.new(stream)
+        entry = Structures::DatabaseRecordEntry.new(stream)
         entries << entry
         bytes_remaining -= entry.header_length
       end
