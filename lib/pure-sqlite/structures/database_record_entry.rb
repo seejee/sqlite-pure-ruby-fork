@@ -30,25 +30,21 @@ module PureSQLite
 
       private
 
-      def get_value(stream)
-        bytes = stream.read(length)
-        bytes.unpack("A#{length}").first
-      end
+      SIMPLE_TYPES = {
+          0 => {type: :null  , length: 0},
+          1 => {type: :int   , length: 1},
+          2 => {type: :int   , length: 2},
+          3 => {type: :int   , length: 3},
+          4 => {type: :int   , length: 4},
+          5 => {type: :int   , length: 6},
+          6 => {type: :int   , length: 8},
+          7 => {type: :float , length: 8},
+          8 => {type: :int   , length: 0},
+          9 => {type: :int   , length: 0},
+      }
 
       def get_data_type_entry(type_value)
-        case(type_value)
-          when 0 then {type: :null  , length: 0}
-          when 1 then {type: :int   , length: 1}
-          when 2 then {type: :int   , length: 2}
-          when 3 then {type: :int   , length: 3}
-          when 4 then {type: :int   , length: 4}
-          when 5 then {type: :int   , length: 6}
-          when 6 then {type: :int   , length: 8}
-          when 7 then {type: :float , length: 8}
-          when 8 then {type: :int   , length: 0}
-          when 9 then {type: :int   , length: 0}
-          else get_complex_data_type(type_value)
-        end
+        SIMPLE_TYPES[type_value] || get_complex_data_type(type_value)
       end
 
       def get_complex_data_type(type_value)
@@ -58,7 +54,12 @@ module PureSQLite
           {type: :blob, length: (type_value - 12) / 2}
         end
       end
-    end
 
+      def get_value(stream)
+        bytes = stream.read(length)
+        bytes.unpack("A#{length}").first
+      end
+
+    end
   end
 end

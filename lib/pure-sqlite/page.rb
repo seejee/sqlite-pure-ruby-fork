@@ -29,12 +29,7 @@ module PureSQLite
     end
 
     def type
-      case page_flag
-        when 0x2 then :index_internal_node
-        when 0xA then :index_leaf_node
-        when 0x5 then :table_internal_node
-        when 0xD then :table_leaf_node
-      end
+      PAGE_FLAGS[page_flag]
     end
 
     def each_record
@@ -42,6 +37,13 @@ module PureSQLite
     end
 
     private
+
+    PAGE_FLAGS = {
+        0x2 => :index_internal_node,
+        0xA => :index_leaf_node,
+        0x5 => :table_internal_node,
+        0xD => :table_leaf_node,
+    }
 
     def read_page_header(stream)
       move_to_page_start(stream)
