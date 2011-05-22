@@ -5,7 +5,7 @@ describe Page do
   context "when reading the first page" do
 
     before(:all) do
-      open_test_db do |io|
+      open_test_db_stream do |io|
         @header = Header.new(io)
         @page   = Page.new(@header, 1, io)
       end
@@ -40,7 +40,7 @@ describe Page do
   context "when reading the first cell" do
 
     before(:all) do
-      open_test_db do |io|
+      open_test_db_stream do |io|
         @header = Header.new(io)
         @page = Page.new(@header, 1, io)
       end
@@ -64,7 +64,7 @@ describe Page do
   context "when reading the second page" do
 
     before(:all) do
-      open_test_db do |io|
+      open_test_db_stream do |io|
         @header = Header.new(io)
         @page   = Page.new(@header, 2, io)
       end

@@ -3,7 +3,7 @@ require "spec_helper"
 describe Header do
 
   before(:all) do
-    open_test_db do |io|
+    open_test_db_stream do |io|
       @header = Header.new(io)
     end
   end

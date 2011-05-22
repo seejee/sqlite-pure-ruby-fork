@@ -4,8 +4,8 @@ describe DatabaseRecord do
 
   context "when reading the first page" do
 
-    before(:all) do
-      open_test_db do |io|
+    before(:each) do
+      open_test_db_stream do |io|
         header  = Header.new(io)
         page    = Page.new(header, 1, io)
         cell    = page.cells.first

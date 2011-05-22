@@ -4,7 +4,11 @@ module PureSQLite
     def self.open(filename)
       File.open(filename) do |stream|
         db = Database.new(stream)
-        yield db
+        if block_given?
+          yield db
+        else
+          return db
+        end
       end
     end
 
