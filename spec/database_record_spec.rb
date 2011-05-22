@@ -2,58 +2,72 @@ require "spec_helper"
 
 describe DatabaseRecord do
 
+  let(:io)              { open_test_db_stream }
+  let(:header)          { Header.new(io) }
+  let(:page)            { Page.new(header, 1, io) }
+  let(:cell)            { page.cells.first }
+  let(:database_record) { cell.database_record }
+
+  after do
+    io.close
+  end
+
   context "when reading the first page" do
 
-    before(:each) do
-      open_test_db_stream do |io|
-        header  = Header.new(io)
-        page    = Page.new(header, 1, io)
-        cell    = page.cells.first
-        @database_record = cell.database_record
-      end
-    end
+    subject { database_record }
 
-    it "should have a header of 6 bytes" do
-      @database_record.total_header_bytes.should == 6
-    end
+    its(:total_header_bytes)  { should == 6 }
+    its(:entries)             { should have(5).items }
 
-    it "should have a 5 data elements" do
-      @database_record.entries.length.should == 5
-    end
+  end
 
-    it "should read the first entry" do
-      get_data(0).type.should == :text
-      get_data(0).length.should == 5
-      get_data(0).value.should == 'table'
-    end
+  context "when reading the first entry" do
 
-    it "should read the second entry" do
-      get_data(1).type.should == :text
-      get_data(1).length.should == 9
-      get_data(1).value.should == 'table_one'
-    end
+    subject { database_record.entries[0] }
 
-    it "should have read the third entry" do
-      get_data(2).type.should == :text
-      get_data(2).length.should == 9
-      get_data(2).value.should == 'table_one'
-    end
+    its(:type)   { should == :text }
+    its(:length) { should == 5 }
+    its(:value)  { should == 'table' }
 
-    it "should have read the fourth entry" do
-      get_data(3).type.should == :int
-      get_data(3).length.should == 1
-      get_data(3).value.should == "\x02"
-    end
+  end
 
-    it "should have read the fifth entry" do
-      get_data(4).type.should == :text
-      get_data(4).length.should == 52
-      get_data(4).value.should == "CREATE TABLE table_one(id int, a_column varchar(20))"
-    end
+  context "when reading the second entry" do
 
-    def get_data(index)
-      @database_record.entries[index]
-    end
+    subject { database_record.entries[1] }
+
+    its(:type)   { should == :text }
+    its(:length) { should == 9 }
+    its(:value)  { should == 'table_one' }
+
+  end
+
+  context "when reading the third entry" do
+
+    subject { database_record.entries[2] }
+
+    its(:type)   { should == :text }
+    its(:length) { should == 9 }
+    its(:value)  { should == 'table_one' }
+
+  end
+
+  context "when reading the fourth entry" do
+
+    subject { database_record.entries[3] }
+
+    its(:type)   { should == :int }
+    its(:length) { should == 1 }
+    its(:value)  { should == "\x02" }
+
+  end
+
+  context "when reading the fifth entry" do
+
+    subject { database_record.entries[4] }
+
+    its(:type)   { should == :text }
+    its(:length) { should == 52 }
+    its(:value)  { should == "CREATE TABLE table_one(id int, a_column varchar(20))" }
 
   end
 end
