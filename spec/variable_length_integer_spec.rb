@@ -4,72 +4,46 @@ describe Structures::VariableLengthInteger do
 
   context "reading a single byte value" do
 
-    before(:all) do
-      setup("\x2b")
-    end
+    let(:bytes) { "\x2b" }
+    let(:io)    { StringIO.open(bytes) }
+    subject     { Structures::VariableLengthInteger.new(io) }
 
-    it "should have a length of 1" do
-      @variable.length.should == 1
-    end
-
-    it "should have a value of 0x2b" do
-      @variable.value.should == 0x2b
-    end
+    its(:length) { should == 1 }
+    its(:value)  { should == 0x2b }
 
   end
 
   context "reading a multiple byte value" do
 
-    before(:all) do
-      setup("\x8c\xA0\x6F")
-    end
+    let(:bytes) { "\x8c\xA0\x6F" }
+    let(:io)    { StringIO.open(bytes) }
+    subject     { Structures::VariableLengthInteger.new(io) }
 
-    it "should have a length of 3" do
-      @variable.length.should == 3
-    end
-
-    it "should have a value of 200815" do
-      @variable.value.should == 200815
-    end
+    its(:length) { should == 3 }
+    its(:value)  { should == 200815 }
 
   end
 
   context "reading a -1" do
 
-    before(:all) do
-      setup("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF")
-    end
+    let(:bytes) { "\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF" }
+    let(:io)    { StringIO.open(bytes) }
+    subject     { Structures::VariableLengthInteger.new(io) }
 
-    it "should have a length of 9" do
-      @variable.length.should == 9
-    end
-
-    it "should have a value of -1" do
-      @variable.value.should == -1
-    end
+    its(:length) { should == 9 }
+    its(:value)  { should == -1 }
 
   end
 
   context "reading a -78506" do
 
-    before(:all) do
-      setup("\xFF\xFF\xFF\xFF\xFF\xFF\xFD\xCD\x56")
-    end
+    let(:bytes) { "\xFF\xFF\xFF\xFF\xFF\xFF\xFD\xCD\x56" }
+    let(:io)    { StringIO.open(bytes) }
+    subject     { Structures::VariableLengthInteger.new(io) }
 
-    it "should have a length of 9" do
-      @variable.length.should == 9
-    end
+    its(:length) { should == 9 }
+    its(:value)  { should == -78506 }
 
-    it "should have a value of -78506" do
-      @variable.value.should == -78506
-    end
-
-  end
-
-  def setup(bytes)
-    StringIO.open(bytes) do |io|
-      @variable = Structures::VariableLengthInteger.new(io)
-    end
   end
 
 end
