@@ -14,8 +14,13 @@ module PureSQLite
 
   def open_test_db_stream
     stream = File.open(test_db_filename)
-    yield stream
-    stream.close
+
+    if(block_given?)
+      yield stream
+      stream.close
+    end
+
+    stream
   end
 
 end

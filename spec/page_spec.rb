@@ -4,82 +4,50 @@ describe Page do
 
   context "when reading the first page" do
 
-    before(:all) do
-      open_test_db_stream do |io|
-        @header = Header.new(io)
-        @page   = Page.new(@header, 1, io)
-      end
+    let(:io)      { open_test_db_stream }
+    let(:header)  { Header.new(io) }
+    subject       { Page.new(header, 1, io) }
+
+    after do
+      io.close
     end
 
-    it "should calculate header length" do
-      @page.header_length.should == 8
-    end
-
-    it "should be a table leaf node" do
-      @page.type.should == :table_leaf_node
-    end
-
-    it "should read the first available offset" do
-      @page.first_available.should == 0
-    end
-
-    it "should read the number of cells" do
-      @page.num_cells.should == 2
-    end
-
-    it "should read the number of cells" do
-      @page.content_start.should == 1873
-    end
-
-    it "should read the fragment free bytes" do
-      @page.fragmented_free_bytes.should == 0
-    end
+    its(:first_available)       { should == 0 }
+    its(:header_length)         { should == 8 }
+    its(:type)                  { should == :table_leaf_node }
+    its(:content_start)         { should == 1873 }
+    its(:num_cells)             { should == 2 }
+    its(:fragmented_free_bytes) { should == 0 }
 
   end
 
   context "when reading the first cell" do
 
-    before(:all) do
-      open_test_db_stream do |io|
-        @header = Header.new(io)
-        @page = Page.new(@header, 1, io)
-      end
+    let(:io)      { open_test_db_stream }
+    let(:header)  { Header.new(io) }
+    subject       { Page.new(header, 1, io).cells[0] }
+
+    after do
+      io.close
     end
 
-    it "should populate cells" do
-      @page.cells.length.should == @page.num_cells
-    end
-
-    it "should read the first cells record size" do
-      @page.cells[0].record_size.should == 82
-    end
-
-    it "should read the first cells key value" do
-      @page.cells[0].key_value.should == 1
-    end
+    its(:record_size) { should == 82 }
+    its(:key_value)   { should == 1 }
 
   end
 
-
   context "when reading the second page" do
 
-    before(:all) do
-      open_test_db_stream do |io|
-        @header = Header.new(io)
-        @page   = Page.new(@header, 2, io)
-      end
+    let(:io)      { open_test_db_stream }
+    let(:header)  { Header.new(io) }
+    subject       { Page.new(header, 2, io) }
+
+    after do
+      io.close
     end
 
-    it "should be a table leaf node" do
-      @page.type.should == :table_leaf_node
-    end
-
-    it "should read the first available offset" do
-      @page.first_available.should == 0
-    end
-
-    it "should read the number of cells" do
-      @page.content_start.should == 2025
-    end
+    its(:first_available) { should == 0 }
+    its(:type)            { should == :table_leaf_node }
+    its(:content_start)   { should == 2025 }
   end
 end
